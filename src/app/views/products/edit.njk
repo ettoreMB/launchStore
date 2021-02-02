@@ -1,0 +1,48 @@
+
+{% extends 'layout.njk' %}
+
+
+{% block content %}
+
+<section class="container form">
+
+    <form method="POST" action="/products?_method=PUT"  enctype="multipart/form-data">
+
+
+        <div class="header">
+            <h3>Editar Produto </h3>
+        </div>
+
+
+        <div class="fields">
+            {% include 'products/fields.njk'%}
+        </div>
+
+        <input name="id" type="hidden" value="{{product.id}}">
+
+        <button class="button edit" type="submit">Atualizar</button>
+
+
+    </form>
+
+    <form id="form-delete" action="/products?_method=DELETE" method="POST" >
+    
+        <input name="id" type="hidden" value="{{product.id}}">
+
+        <button class="button delete" type="submit">Deletar</button>
+    </form>
+
+</section>
+
+
+<script>
+    const fomDelete = document.querySelector("#form-delete");
+    fomDelete.addEventListener("submit", function (event) {
+        const confirmation = confirm("Deseja deleltar?");
+        if (!confirmation) {
+            event.preventDefault();
+        }
+    })
+</script>
+
+{% endblock content %}
