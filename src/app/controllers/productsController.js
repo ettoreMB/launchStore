@@ -25,6 +25,7 @@ module.exports = {
     const product = await Product.find(req.params.id)
 
     if(!product) return res.send('Produto nao encontrado')
+
     const {day,month, hours, minutes} = date(product.updated_at)
     product.published = {
       day, 

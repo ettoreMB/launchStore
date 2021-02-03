@@ -1,3 +1,6 @@
+DROP DATABASE IF EXISTS public;
+CREATE DATABASE public;
+
 DROP DATABASE IF EXISTS launchstoredb;
 CREATE DATABASE launchstoredb;
 
@@ -35,7 +38,7 @@ CREATE TABLE "users" (
   "id" SERIAL PRIMARY KEY,
   "name" text NOT NULL,
   "email" text UNIQUE NOT NULL,
-  "password" text UNIQUE NOT NULL,
+  "password" text NOT NULL,
   "cpf_cnpj" text UNIQUE NOT NULL,
   "cep" text,
   "address" text,
@@ -78,3 +81,12 @@ WITH (OIDS=FALSE);
 ALTER TABLE "session" ADD CONSTRAINT "session_pkey" PRIMARY KEY ("sid") NOT DEFERRABLE INITIALLY IMMEDIATE;
 
 CREATE INDEX "IDX_session_expire" ON "session" ("expire");
+
+
+DELETE FROM users;
+DELETE FROM products;
+DELETE FROM files;
+
+ALTER SEQUENCE products_id_seq RESTART WITH 1;
+ALTER SEQUENCE users_id_seq RESTART WITH 1;
+ALTER SEQUENCE files_id_seq RESTART WITH 1	

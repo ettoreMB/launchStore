@@ -76,7 +76,7 @@ module.exports = {
   },
   async delete(req, res) {
     try {
-      const products = await Product.findAll({where: {user_id = req.body.id}});
+      const products = await Product.findAll({where: {user_id: req.body.id}});
 
       const allFilesPromisse = products.map(product => 
         Product.files(product.id));
