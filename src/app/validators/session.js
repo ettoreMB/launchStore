@@ -1,6 +1,6 @@
 const User = require('../models/User')
 const { compare } = require('bcryptjs')
-const { urlencoded } = require('express')
+
 
 
 
@@ -34,7 +34,7 @@ async function forgot (req, res, next) {
   const {email} = req.body
 
   try {
-    let user = await User.findOne({where: {email}})
+    let user = await User.findOne({ where: { email } })
 
     if(!user) return res.render('session/forgot-password', {
       user: req.body,
@@ -54,7 +54,7 @@ async function reset (req, res, next) {
     // serach user
       const {email, password, token, passwordRepeat} = req.body
 
-      const user = await User.findOne({where: {email}})
+      const user = await User.findOne({ where: { email } })
 
       if(!user) return res.render('session/password-reset', {
         user: req.body,

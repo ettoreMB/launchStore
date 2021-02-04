@@ -9,12 +9,12 @@ const {formatPrice, date} = require ('../../lib/utils.js')
 module.exports = {
  async create(req, res) {
     try {
-    const  results = await Category.all()
-    const categories = results.rows
+    const  categories = await Category.findAll()
+
  
     return res.render('products/create.njk', {categories})
     } catch (error) {
-      console(error)
+      console.error(error)
     }
    
   
@@ -52,7 +52,7 @@ module.exports = {
  },
 
  async edit(req, res) {
-
+  try {
     const product = await Product.find(req.params.id);
      
     if (!product) return res.send("Product not found!");
@@ -72,6 +72,10 @@ module.exports = {
     }))
 
     return res.render("products/edit", { product, categories, files });
+  } catch (error) {
+    console.error(error)
+  }
+    
  }, 
 
  async post(req, res) {
@@ -126,9 +130,9 @@ module.exports = {
     }
 
     if(req.files.length != 0 ){
-      const newFilesPromise = req.files.map(file => {
+      const newFilesPromise = req.files.map(file => 
         File.create({...file, product_id: req.body.id})
-      })
+        )
       await Promise.all(newFilesPromise)
     }
 
@@ -136,8 +140,8 @@ module.exports = {
     if (req.body.removed_files) {
       // entrada 1,2,3
       const removedFiles = req.body.removed_files.split(',') // [1,2,3,]
-      const lasIndex = removedFiles.length -1 
-      removedFiles.splice(lasIndex, 1) //saida [1,2,3]
+      const lastIndex = removedFiles.length -1 
+      removedFiles.splice(lastIndex, 1) //saida [1,2,3]
 
       const removedFilesPromise = removedFiles.map(id => File.delete(id))
 
@@ -149,7 +153,7 @@ module.exports = {
     if (req.body.old_price != req.body.price) {
       const oldProduct = await Product.find(req.body.id)
 
-      req.body.old_price = oldProduct.rows[0].price
+      req.body.old_price = oldProduct.price
     } 
 
     await Product.update(req.body.id, {
@@ -164,7 +168,7 @@ module.exports = {
 
     return res.redirect(`/products/${req.body.id}`)
     } catch (error) {
-      console(error)
+      console.error(error)
     }
     
  },

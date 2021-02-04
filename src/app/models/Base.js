@@ -2,7 +2,7 @@ const db = require('../../config/db')
 
 function find(filters, table) {
   try {
-    let query = `SELECT * FROM ${table} `
+    let query = ` SELECT * FROM ${table} `
     
     if(filters) {
       Object.keys(filters).map(key => {
@@ -85,10 +85,7 @@ const Base = {
         update.push(line)
       })   
 
-      let query = `UPDATE ${this.table} SET 
-        (${update.join(',')})
-        WHERE id = $(${id})
-      `
+      let query = `UPDATE ${this.table} SET ${update.join(',')} WHERE id = ${id}`
       return db.query(query)
       
     } catch (error) {
@@ -97,7 +94,7 @@ const Base = {
   },
 
   delete(id) {
-    return db.query(`DELETE FROM ${this.table} WHERE id = $1`, [id] )
+    return db.query(` DELETE FROM ${this.table} WHERE id = $1 `, [id] )
   },
 
 }
