@@ -86,8 +86,8 @@ module.exports = {
       await User.delete(req.body.id)
       req.session.destroy()
 
-      promisseResults.map(result => {
-        result.rows.map(file => {
+      promisseResults.map(files => {
+        files.map(file => {
           try {
               fs.unlinkSync(file.path)
           } catch (error) {
