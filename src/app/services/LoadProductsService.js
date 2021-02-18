@@ -1,4 +1,4 @@
-const Product = require('../controllers/productsController')
+const Product = require('../models/product')
 const {formatPrice, date} = require ('../../lib/utils.js')
 
 
@@ -10,7 +10,7 @@ async function getImages(productId) {
   }))
     
     
-  return files[0]
+  return files
 }
 
 async function format(product) {
@@ -30,11 +30,11 @@ async function format(product) {
 }
 
 const loadService = {
-  load(service, filter) {
+  async load(service, filter) {
     this.filter = filter
     return this[service]()
   },
-  product(){
+ async product(){
     try {
       const product = await Product.findOne(this.filter)
       return format(product)
@@ -42,7 +42,7 @@ const loadService = {
       console.error(error)
     }
   },
-  products(){
+  async products(){
     try {
       const products = await Product.findAll(this.filter)
       const produtcsPromise = products.map(format)  //products.map(product=> format(product))
@@ -55,6 +55,5 @@ const loadService = {
 }
 
 
-module.exports = {
+module.exports = 
   loadService
-}
