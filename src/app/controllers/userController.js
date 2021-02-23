@@ -3,9 +3,7 @@ const fs = require('fs')
 const User = require('../models/User')
 const Product = require('../models/product')
 const { formatCep,formatCpfCnpj} = require('../../lib/utils')
-
-
-
+const LoadProductSevices = require('../services/LoadProductsService')
 
 // eslint-disable-next-line no-undef
 module.exports = {
@@ -105,5 +103,12 @@ module.exports = {
         error: "Erro ao tentar excluir tente mais tarde"
       })  
     }
+  }, 
+  async adds(req, res) {
+    const products = await LoadProductSevices.products('products', {
+       where: { user_id: req.session.userId}
+      })
+
+      return res.render('user/ads', { products })
   }
 }

@@ -6,6 +6,7 @@ const productController = require('../app/controllers/productsController')
 const searchController = require('../app/controllers/searchController')
 const {onlyUsers} = require('../app/middlewares/session')
 
+const Validator = require('../app/validators/product')
 //Search
 routes.get('/search', searchController.index)
 
@@ -16,8 +17,8 @@ routes.get('/:id/edit',onlyUsers, productController.edit)
 
 
 //create product
-routes.post('/',onlyUsers, multer.array("photos", 6), productController.post)
-routes.put('/',onlyUsers, multer.array("photos", 6), productController.put)
+routes.post('/',onlyUsers, multer.array("photos", 6), Validator.post,productController.post)
+routes.put('/',onlyUsers, multer.array("photos", 6), Validator.put,productController.put)
 routes.delete('/',onlyUsers, productController.delete)
 
 
