@@ -4,10 +4,11 @@ const routes = express.Router()
 const UserValidaor = require('../app/validators/user')
 const SessionValidator = require('../app/validators/session')
 const sessionController = require('../app/controllers/sessionController')
+const userController = require('../app/controllers/userController')
+const orderController = require('../app/controllers/orderController')
 const { isLoggedREdirectToUsers, onlyUsers } = require('../app/middlewares/session')
 
-// const sessionController = require('../controllers/sessionController')
-const userController = require('../app/controllers/userController')
+
 
 // //login - logout
 routes.get('/login',isLoggedREdirectToUsers, sessionController.loginForm)
@@ -30,4 +31,8 @@ routes.put('/', UserValidaor.update, userController.update)
 routes.delete('/', userController.delete)
 
 routes.get('/adds', userController.adds)
+
+
+routes.post('/orders',onlyUsers, orderController.post)
+
  module.exports = routes

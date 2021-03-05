@@ -35,7 +35,6 @@ const Base = {
       console.error(error)
     }
     
-   
   },
 
   async findOne(filters) {

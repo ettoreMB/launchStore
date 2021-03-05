@@ -99,8 +99,6 @@ module.exports = {
       })
 
       
-  
-
       const filesPromise = req.files.map(file => 
         File.create({ name: file.filename, path: file.path , product_id}))
 
