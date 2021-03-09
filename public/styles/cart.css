@@ -75,6 +75,7 @@
 
 .cart .quantity-control i {
   color: #555;
+  background-color: #fff;
 }
 
 .cart .add,
@@ -85,6 +86,10 @@
 
 .cart .delete {
   color: red;
+  background-color: #fff;
+}
+.cart .delete:hover {
+  color: #fff;
 }
 
 .cart .total {

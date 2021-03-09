@@ -1,30 +1,25 @@
 {% extends "layout.njk" %}
-
 {% import 'parts/card.njk' as card %}
 
 {% block content %}
-
 {% call card.render('', 'product-single container' ) %}
-
-{% block content %}
-
 
     <div class="gallery">
         <div class="highlight">
-            {% if not files[0] %}
+            {% if not product.files[0] %}
                <img src="http://placehold.it/500x500?text=PRODUTO SEM FOTO" />
             {% else %}
                <img 
-               src="{{files[0].src}}" 
-               alt="{{files[0].name}}" 
+               src="{{product.img}}" 
+               alt="{{product.files[0].name}}" 
                onclick="Lightbox.open()"
                >
             {% endif %}
 
             <div class="lightbox-target">
                 <img 
-                   src="{{files[0].src}}" 
-                   alt="{{files[0].name}}">
+                   src="{{product.img}}" 
+                   alt="{{product.files[0].name}}">
                    <a href="#" 
                    class="lightbox-close" 
                    onclick="Lightbox.close()"
@@ -93,6 +88,7 @@
         </div>
 
     </div>
-{%endcall%}
 
+{%endcall%}
 {% endblock content %}
+

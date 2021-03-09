@@ -1,10 +1,13 @@
 const Category = require('../models/Category')
 const Product = require('../models/product')
 const File = require('../models/File')
+const loadProductsService = require('../services/LoadProductsService')
 
 const {unlinkSync} = require('fs')
 
 const {formatPrice, date} = require ('../../lib/utils.js')
+const { product } = require('../services/LoadProductsService')
+
 
 
 
@@ -24,8 +27,11 @@ module.exports = {
 
  async show(req, res) {
   try {
-    const product = await Product.find(req.params.id)
-
+    const product = await loadProductsService.load('product', {
+      where: { id: req.params.id}
+      
+    })
+    console.log(product)
     if(!product) return res.send('Produto nao encontrado')
 
     const {day,month, hours, minutes} = date(product.updated_at)
@@ -36,17 +42,9 @@ module.exports = {
       month
     }
 
-    product.old_price = formatPrice(product.old_price)
-    product.price = formatPrice(product.price)
+    
 
-    let files = await Product.files(product.id)
-    files = files.map(file => ({
-      ...file,
-      src: `${req.protocol}://${req.headers.host}${file.path.replace('public', '')}`
-
-    }))
-
-    return res.render('products/show', {product, files})
+    return res.render('products/show', {product})
   } catch (error) {
     console.log(error)
   }
@@ -98,9 +96,10 @@ module.exports = {
         status: status || 1 
       })
 
+      req.body.user_id = req.session.userId
       
       const filesPromise = req.files.map(file => 
-        File.create({ name: file.filename, path: file.path , product_id}))
+        File.create({ name: file.filename, path: file.path.replace(/\\/g, "/") , product_id}))
 
       await Promise.all(filesPromise)
         

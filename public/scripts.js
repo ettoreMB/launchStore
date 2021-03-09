@@ -58,7 +58,8 @@ const PhotosUpload = {
   preview: document.querySelector('#photos-preview'),
   uploadLimit: 6,
   files: [],
-handleFileInput(event) {//02
+
+  handleFileInput(event) {//02
 
   const { files: fileList } = event.target
   PhotosUpload.input = event.target //recebendo input do html
@@ -67,7 +68,7 @@ handleFileInput(event) {//02
     return 
   } 
 
-  Array.from(fileList).forEach((file) => { 
+  Array.from(fileList).forEach(file => { 
 
     PhotosUpload.files.push(file); // create  array  files
 
@@ -89,10 +90,10 @@ handleFileInput(event) {//02
   });
 
   PhotosUpload.input.files = PhotosUpload.getAllFiles(); // trocando o padrão files
-},
+  },
 hasLimit(e) {
-  const { uploadLimit,preview } = PhotosUpload
-  const { files: fileList } = PhotosUpload.input
+  const { uploadLimit,preview, input } = PhotosUpload
+  const { files: fileList } = input
 
   //limitação no upload 
   if (fileList.length > uploadLimit) {
@@ -102,7 +103,7 @@ hasLimit(e) {
   }
 
   const photoDiv = []; // array de fotos
-  preview.childNodes.forEach((item) => {// cada item, filho dentro preview
+  preview.childNodes.forEach(item => {// cada item, filho dentro preview
     if (item.classList && item.classList.value == "photos") {
       photoDiv.push(item); // add as fotod
     }

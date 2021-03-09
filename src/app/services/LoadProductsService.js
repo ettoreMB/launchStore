@@ -6,21 +6,21 @@ async function getImages(productId) {
   let files = await Product.files(productId) 
   files = files.map(file => ({
     ...file, 
-    src: `${file.path.replace('public', '')}`
+    src: `${file.path.replace('public', "")}`
   }))
-    
-    
+      
   return files
 }
 
 async function format(product) {
   const files = await getImages(product.id)
-  product.img = files[0]
+  product.img = files[0].src
   product.files = files
-  product.formatedPrice = formatPrice(product.price)
-  product.formatedOldPrice = formatPrice(product.old_price)
+  product.formattedPrice = formatPrice(product.price)
+  product.formattedOldPrice = formatPrice(product.old_price)
 
   const {day,month, hours, minutes} = date(product.updated_at)
+  
     product.published = {
       day: `${day}/${month}`,
       hours: `${hours}h${minutes}`
