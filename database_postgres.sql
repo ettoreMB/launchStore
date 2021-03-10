@@ -48,6 +48,25 @@ CREATE TABLE "users" (
   "updated_at" timestamp DEFAULT (now())
 );
 
+
+CREATE TABLE "orders" (
+  "id" SERIAL  PRIMARY KEY,
+  "seller_id" int NOT NULL,
+  "buyer_id" int NOT NULL,
+  "product_id" int NOT NULL,
+  "price" int NOT NULL,
+  "quantity" int NOT NULL,
+  "total" int not NULL,
+  "status" text NOT NULL,
+  "created_at" timestamp DEFAULT (now()),
+  "updated_at" timestamp DEFAULT (now())
+);
+
+
+ALTER TABLE "orders" ADD FOREIGN KEY ("seller_id") REFERENCES "users" ("id");
+ALTER TABLE "orders" ADD FOREIGN KEY ("buyer_id") REFERENCES "users" ("id");
+ALTER TABLE "orders" ADD FOREIGN KEY ("product_id") REFERENCES "products" ("id");
+
 --foreign Key
 ALTER TABLE "products" ADD FOREIGN KEY ("category_id") REFERENCES "categories" ("id");
 ALTER TABLE "products" ADD FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE;
