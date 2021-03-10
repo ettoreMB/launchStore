@@ -18,7 +18,7 @@
 
             <div class="lightbox-target">
                 <img 
-                   src="{{product.img}}" 
+                   src="{{product.files[0].src}}" 
                    alt="{{product.files[0].name}}">
                    <a href="#" 
                    class="lightbox-close" 
@@ -31,7 +31,7 @@
         </div>
 
         <div class="gallery-preview">
-            {% for image in files %}
+            {% for image in product.files %}
               <img 
                  src="{{image.src}}" 
                  alt="{{image.name}}"
@@ -57,10 +57,10 @@
 
         <div class="price-buy">
             <div class="price">
-                {{ product.price}}
+                {{product.formattedPrice}}
 
                 {% if product.price !== product.old_price %}
-                <span class="old">{{product.old_price}}</span>
+                <span class="old">{{product.formattedOlPrice}}</span>
                 {% endif %}
             </div>
 
@@ -75,9 +75,8 @@
                 {% elseif product.quantity == 0 %}
                   <button class="unavailable">Fora de estoque</button>
                 {% else %}
-                <form action="/users/orders" method="post">
-                <input type="hidden" name="id" value={{product.id}}>
-                    <button class="button">Comprar</button>
+                <form action="/cart/{{product.id}}/add-one" method="post">
+                    <button class="button">Adicionar ao Carrinho</button>
                 </form>
                 {% endif %}
             </div>

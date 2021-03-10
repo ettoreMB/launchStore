@@ -11,7 +11,7 @@ module.exports ={
             
               let products = await Product.search({filter, category})
 
-             const producsPromise = products.map(LoadProductsService.format)
+             const productsPromise = products.map(LoadProductsService.format)
             
 
               products = await Promise.all(productsPromise)

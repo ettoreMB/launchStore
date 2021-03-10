@@ -2,7 +2,16 @@
 {% import 'parts/card.njk' as card %}
 
 {% block content %}
-{% call card.render('', 'cart container' ) %}
+
+    {% if (cart.items) and (cart.items.length < 1 ) %}
+      {% call card.render('', 'cart-empty container' ) %}
+      <p>Carrinho Vazio</p>
+      <a href="/products/search" class="button">Comprar</a>
+    {%endcall%}
+
+  {%else%}
+
+  {% call card.render('', 'cart container' ) %}
 
    <div class="header">
     <p>Produto</p>
@@ -23,11 +32,11 @@
       <span class="price">{{item.formattedPrice}}</span>
 
       <div class="quantity-control">
-        <form action="/cart/{{item.product.id}}/remove" method="post">
+        <form action="/cart/{{item.product.id}}/remove-one" method="post">
           <button class="remove">
             <i class="material-icons">remove_circle_outline</i>
           </button>
-
+        </form>
 
           <span class="quantity">{{item.quantity}}</span>
 
@@ -66,6 +75,6 @@
         </form>
   </div>
   
-{%endcall%}
-    
+  {%endcall%}
+  {% endif %}
 {% endblock content %}

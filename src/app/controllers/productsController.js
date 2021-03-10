@@ -31,7 +31,7 @@ module.exports = {
       where: { id: req.params.id}
       
     })
-    console.log(product)
+
     if(!product) return res.send('Produto nao encontrado')
 
     const {day,month, hours, minutes} = date(product.updated_at)

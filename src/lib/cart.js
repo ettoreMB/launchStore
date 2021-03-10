@@ -15,9 +15,7 @@ const Cart = {
     }
     return this
   },
-  getCartItem(productId) {
-    return this.items.find( item => item.product.id == productId)
-  },
+ 
 
   addOne(product) {
     let inCart = this.getCartItem(product.id)
@@ -56,17 +54,19 @@ const Cart = {
     inCart.price = inCart.product.price * inCart.quantity
     inCart.formattedPrice = formatPrice(inCart.price)
     
-    this.total.quantity --
+    this.total.quantity--
     this.total.price -= inCart.product.price
     this.total.formattedPrice = formatPrice(this.total.price)
 
     if (inCart.quantity < 1 ) {
 
-      //this.items = this.items.filter(item => item.product.id != inCart.product.id)  return this
-      const itemIndex = this.items.indexOf(inCart)
-      this.items.splice(itemIndex, 1)
+      this.items = this.items.filter(item => item.product.id != inCart.product.id)  
       return this
+      //const itemIndex = this.items.indexOf(inCart)
+     // this.items.splice(itemIndex, 1)
+     // return this
     }
+    return this
   },
   delete(productId) {
     const inCart = this.getCartItem(productId)
@@ -80,6 +80,10 @@ const Cart = {
     }
 
     this.items = this.items.filter(item => inCart.product.id != item.product.id)
+  },
+
+  getCartItem(productId) {
+    return this.items.find( item => item.product.id == productId)
   },
 
   
