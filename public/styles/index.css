@@ -186,7 +186,7 @@ form .items {
 	margin-bottom: 16px;
 }
 
- .items > div:nth-child(1) {
+ .item > div:nth-child(1) {
 	color: #777;
 	text-transform: uppercase;
 	font-size: 14px;
@@ -211,7 +211,7 @@ form .items {
 	font-size: 16px;
 }
 
- .items select {
+ .item select {
 	/*permitir estilização do select*/
 	-moz-appearance: none;
 	-webkit-appearance: none;
@@ -226,7 +226,7 @@ form .items {
 	background-size: .65em auto, 100%;
 }
 
-form .items textarea {
+form .item textarea {
 	min-height: 150px;
 }
 
@@ -268,7 +268,7 @@ form .item #photos-upload p {
 	font-size: 14px;
 }
 
-form .items #photos-input {
+form .item #photos-input {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -280,7 +280,7 @@ form .items #photos-input {
 	cursor: pointer;
 }
 
-form .items #photos-preview {
+form .item #photos-preview {
 	display: grid;
 	grid-template-columns:  repeat(3, 1fr);
 	grid-gap: 8px;
@@ -288,18 +288,18 @@ form .items #photos-preview {
 	margin: 8px 0;
 }
 
-form .items #photos-preview img {
+form .item #photos-preview img {
 	width: 100%;
 	height: 150px;
 	
 	object-fit: cover;
 }
 
-#photos-preview .photos {
+ .item #photos-preview .photo {
 	position: relative;
 }
 
-#photos-preview .photos i {
+ .item #photos-preview .photo i {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -323,7 +323,7 @@ form .items #photos-preview img {
 	opacity: 0;
 }
 
-#photos-preview .photos:hover i {
+.item #photos-preview .photo:hover i {
 	opacity: 1;
 }
 
@@ -333,7 +333,7 @@ form .items #photos-preview img {
 	margin: 48px 0;
 }
 
-.shop .items {
+.shop .item {
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr;
 
@@ -352,13 +352,13 @@ form .items #photos-preview img {
 	background-repeat: no-repeat;
 }
 
-.shop .items h4 {
+.shop .item h4 {
 	margin: 8px 0;
 	font-weight: 300;
 	color: #999;
 }
 
-.shop .items p {
+.shop .item p {
 	color: #101010;
 	font-weight: 300;
 	font-size: 24px;

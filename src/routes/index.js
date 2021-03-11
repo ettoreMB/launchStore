@@ -6,6 +6,7 @@ const HomeController = require("../app/controllers/HomeController")
 const products = require("./products")
 const users = require("./users")
 const cart = require("./carts")
+const orders = require("./orders")
 //const orders = require("./orders")
 
 routes.get("/", HomeController.index)
@@ -13,7 +14,7 @@ routes.get("/", HomeController.index)
 routes.use("/users", users)
 routes.use("/products", products)
 routes.use("/cart", cart)
-//routes.use("/orders", orders)
+routes.use("/orders", orders)
 
 // Alias
 routes.get("/ads/create", function (req, res) {

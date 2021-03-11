@@ -1,60 +1,56 @@
-const Product = require('../models/product')
-const {formatPrice, date} = require ('../../lib/utils.js')
+const Product = require('../models/Product')
 
+const { formatPrice, date } = require('../../lib/utils')
 
 async function getImages(productId) {
-  let files = await Product.files(productId) 
+  let files = await Product.files(productId)
   files = files.map(file => ({
-    ...file, 
-    src: `${file.path.replace('public', "")}`
+    ...file,
+    src: `${file.path.replace("public", "")}`
   }))
-      
+
   return files
 }
 
 async function format(product) {
+
   const files = await getImages(product.id)
   product.img = files[0].src
   product.files = files
-  product.formattedPrice = formatPrice(product.price)
   product.formattedOldPrice = formatPrice(product.old_price)
+  product.formattedPrice = formatPrice(product.price)
 
-  const {day,month, hours, minutes} = date(product.updated_at)
-  
-    product.published = {
-      day: `${day}/${month}`,
-      hours: `${hours}h${minutes}`
-    }
+  const { day, hour, minutes, month } = date(product.updated_at)
+
+  product.published = {
+    day: `${day}/${month}`,
+    hour: `${hour}h${minutes}`,
+  }
 
   return product
 }
 
-const loadService = {
-  async load(service, filter) {
+module.exports = {
+  load(service, filter) {
     this.filter = filter
     return this[service]()
   },
- async product(){
+  async product() {
     try {
       const product = await Product.findOne(this.filter)
       return format(product)
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
-    
   },
-  async products(){
+  async products() {
     try {
       const products = await Product.findAll(this.filter)
-      const produtcsPromise = products.map(format)  //products.map(product=> format(product))
-      return Promise.all(produtcsPromise)
+      const productsPromise = products.map(format)
+      return Promise.all(productsPromise)
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
   },
   format,
 }
-
-
-module.exports = 
-  loadService

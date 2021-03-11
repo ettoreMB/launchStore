@@ -33,6 +33,6 @@ routes.delete('/', userController.delete)
 routes.get('/adds', userController.adds)
 
 
-routes.post('/orders',onlyUsers, orderController.post)
+
 
  module.exports = routes
