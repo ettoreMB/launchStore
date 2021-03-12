@@ -28,7 +28,7 @@ module.exports = {
  async show(req, res) {
   try {
     const product = await loadProductsService.load('product', {
-      where: { id: req.params.id}
+      where: { id: req.params.id }
       
     })
 

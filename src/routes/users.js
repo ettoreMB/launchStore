@@ -30,7 +30,7 @@ routes.get('/accounts',onlyUsers,UserValidaor.show, userController.show)
 routes.put('/', UserValidaor.update, userController.update)
 routes.delete('/', userController.delete)
 
-routes.get('/adds', userController.adds)
+routes.get('/ads', userController.adds)
 
 
 

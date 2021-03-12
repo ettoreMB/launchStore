@@ -1,10 +1,4 @@
-DROP DATABASE IF EXISTS public;
-CREATE DATABASE public;
-
-DROP DATABASE IF EXISTS launchstoredb;
-CREATE DATABASE launchstoredb;
-
-CREATE TABLE "products" (
+CREATE TABLE "prodcuts" (
   "id" SERIAL PRIMARY KEY,
   "category_id" int NOT NULL,
   "user_id" int,
@@ -14,6 +8,7 @@ CREATE TABLE "products" (
   "price" int NOT NULL,
   "quantity" int DEFAULT 0,
   "status" int DEFAULT 1,
+  "deleted_at" timestamp,
   "created_at" timestamp DEFAULT (now()),
   "updated_at" timestamp DEFAULT (now())
 );
@@ -48,7 +43,6 @@ CREATE TABLE "users" (
   "updated_at" timestamp DEFAULT (now())
 );
 
-
 CREATE TABLE "orders" (
   "id" SERIAL  PRIMARY KEY,
   "seller_id" int NOT NULL,
@@ -62,17 +56,29 @@ CREATE TABLE "orders" (
   "updated_at" timestamp DEFAULT (now())
 );
 
-
-ALTER TABLE "orders" ADD FOREIGN KEY ("seller_id") REFERENCES "users" ("id");
-ALTER TABLE "orders" ADD FOREIGN KEY ("buyer_id") REFERENCES "users" ("id");
-ALTER TABLE "orders" ADD FOREIGN KEY ("product_id") REFERENCES "products" ("id");
-
+CREATE TABLE "session" (
+  "sid" varchar NOT NULL COLLATE "default",
+	"sess" json NOT NULL,
+	"expire" timestamp(6) NOT NULL
+)
+WITH (OIDS=FALSE);
 
 
 --foreign Key
 ALTER TABLE "products" ADD FOREIGN KEY ("category_id") REFERENCES "categories" ("id");
 ALTER TABLE "products" ADD FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE;
-ALTER TABLE "files" ADD FOREIGN KEY ("product_id") REFERENCES "products" ("id") ON DELETE CASCADE;
+ALTER TABLE "files" ADD FOREIGN KEY ("product_id") REFERENCES "product_with_deleted" ("id") ON DELETE CASCADE;
+
+
+ALTER TABLE "orders" ADD FOREIGN KEY ("seller_id") REFERENCES "users" ("id");
+ALTER TABLE "orders" ADD FOREIGN KEY ("buyer_id") REFERENCES "users" ("id");
+ALTER TABLE "orders" ADD FOREIGN KEY ("product_id") REFERENCES "products" ("id");
+
+--session  pg simple
+ALTER TABLE "session" ADD CONSTRAINT "session_pkey" PRIMARY KEY ("sid") NOT DEFERRABLE INITIALLY IMMEDIATE;
+
+CREATE INDEX "IDX_session_expire" ON "session" ("expire");
+
 
 --procedures
 
@@ -87,7 +93,7 @@ $$LANGUAGE plpgsql;
 
 -- auto updated at
 CREATE TRIGGER set_timestamp
-BEFORE UPDATE ON products
+BEFORE UPDATE ON product_with_deleted
 FOR EACH ROW
 EXECUTE PROCEDURE trigger_set_timestamp();
 
@@ -96,19 +102,23 @@ BEFORE UPDATE ON orders
 FOR EACH ROW
 EXECUTE PROCEDURE trigger_set_timestamp();
 
---session  pg simple
-CREATE TABLE "session" (
-  "sid" varchar NOT NULL COLLATE "default",
-	"sess" json NOT NULL,
-	"expire" timestamp(6) NOT NULL
-)
-WITH (OIDS=FALSE);
 
-ALTER TABLE "session" ADD CONSTRAINT "session_pkey" PRIMARY KEY ("sid") NOT DEFERRABLE INITIALLY IMMEDIATE;
+-- Soft Delete -- 
+CREATE OR REPLACE RULE delete_product AS
+ON DELETE TO product_with_deleted DO INSTEAD
+UPDATE products
+SET deleted_at = now()
+WHERE products.id = old.id;
 
-CREATE INDEX "IDX_session_expire" ON "session" ("expire");
+-- Cretae View Products 
+CREATE VIEW products_without_deleted AS
+SELECT * FROM products WHERE deleted_at IS NULL;
 
+--renomear view e table
+ALTER TABLE products RENAME TO product_with_deleted;
+ALTER VIEW products_without_deleted RENAME TO products;
 
+--Delete querys ---
 DELETE FROM users;
 DELETE FROM products;
 DELETE FROM files;

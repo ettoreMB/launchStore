@@ -9,7 +9,14 @@ const orderController = require('../app/controllers/orderController')
 
 // //login - logout
 routes.post('/', onlyUsers, orderController.post)
-routes.get('/', onlyUsers, orderController.index)
+      .get('/', onlyUsers, orderController.index)
+      .get('/sales', onlyUsers, orderController.sales)
+      .get('/:id', onlyUsers, orderController.show)
+      .post('/:id/:action', onlyUsers, orderController.update)
+
+
+
+
      
 
  module.exports = routes

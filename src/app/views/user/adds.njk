@@ -1,31 +1,43 @@
-{% extends 'layout.njk' %}
-{% import "parts/card.njk" as cards%}
+{% extends 'layout.njk'%}
+{% import 'parts/card.njk' as cards %}
 
-{% block content %}
 
-{% call cards.render('Meus Anúncios', 'user-ads container') %}
-  <div class="items">
-    {% for product in products %}
-      <div class="item">
-        <div class="image"
-          style="background-image: url({{product.img})"
-        >
-        </div>
+{% block style%}
+   <link rel="stylesheet" href="/styles/user.css">
+{% endblock style%}
 
-        <div class="info">
-          <div class="title">{{product.name}}</div>
-          <div class="price">{{product.formatedPrice}}</div>
-          <div class="published">Publicado em {{product.formatedCreatedAt}}</div>
-        </div>
 
-        <div class="actions">
-          <a href="/products/{{product.id}}/edit">Editar</a>
-          <a href="/products/{{product.id}}">Visualizar</a>
-        </div>
+{% block content%}
+
+   {% if(products.length < 1)%}
+      {% call cards.render('', 'cart-empty container')%}
+	 <p>Nenhum Produto a Venda</p>
+	 <a href="/ads/create" class='button'>Comece a Vender</a>
+      {% endcall%}
+   {%else%}
+   {% call cards.render('Meus Anúncios', 'users-ads container')%}
+      <div class="items">
+	 {% for product in products %}
+	    <div class="item">
+
+	       <div class="image"
+		    style='background-image: url({{product.img}})'>     
+	       </div>
+
+	       <div class="info">
+		  <div class="title">{{product.name}}</div>
+		  <div class="price">{{product.formattedPrice}}</div>
+		  <div class="published">Publicado em {{product.published.day}}</div>
+		  <div class="actions">
+		     <a href="/products/{{product.id}}/edit" >Editar</a>
+		     <a href="/products/{{product.id}}" >Ver</a>
+		  </div>
+	       </div>
+
+	    </div>
+
+	 {%endfor%}
       </div>
-    {% endfor %}
-  </div>
-
-{%endcall%}
-
-{% endblock content %}
+   {% endcall %}
+   {%endif%}
+{% endblock content%}

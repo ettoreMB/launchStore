@@ -22,7 +22,7 @@ module.exports = {
     try {
       let {name, email, password, cpf_cnpj, address, cep} = req.body
 
-      passwod = await hash(password, 8)
+      password = await hash(password, 8)
       cpf_cnpj = cpf_cnpj.replace(/\D/g, ""),
       cep = cep.replace(/\D/g, "")
 
@@ -37,7 +37,7 @@ module.exports = {
 
       req.session.userId = userId
 
-      return res.redirect('/users')
+      return res.redirect('/')
 
 
     } catch (error) {
@@ -108,7 +108,7 @@ module.exports = {
     const products = await LoadProductSevices.products('products', {
        where: { user_id: req.session.userId}
       })
-
-      return res.render('user/ads', { products })
+      
+      return res.render('user/adds', { products })
   }
 }

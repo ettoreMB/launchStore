@@ -1,8 +1,12 @@
 const LoadProductService = require('../services/LoadProductsService')
+const loadOrderService = require('../services/LoadOrdersService')
 const User = require('../models/User')
 const Order = require('../models/Order')
 const mailer = require('../../lib/mailer')
 const Cart = require('../../lib/cart')
+const { update } = require('../models/Order')
+
+
 
 
 const email = (seller, product, buyer) =>  `
@@ -22,13 +26,12 @@ const email = (seller, product, buyer) =>  `
 `
 module.exports = {
   async index(req, res) {
-    const orders = await Order.findAll( { where: { buyer_id: req.session.userId}})
-
-    orders.map(order => {
-      
+    
+    const orders = await loadOrderService.load('orders', {
+      where: { buyer_id: req.session.userId }
     })
 
-    return res.render
+    return res.render('orders/index', {orders} )
   },
   async post(req, res) {
     try {
@@ -80,6 +83,55 @@ module.exports = {
     } catch (error) {
       console.error(error)
       return res.render('orders/error')
+    }
+  },
+  async sales(req, res) {
+    const sales = await loadOrderService.load('orders', {
+      where: { seller_id: req.session.userId }
+    })
+
+    return res.render('orders/index', {sales} )
+    
+  },
+  async show(req, res) {
+    const order = await loadOrderService.load('product',{
+      where: { id:req.params.id }
+    })
+
+
+    return res.render('orders/details', {order})
+  }, 
+  async update (req,res) {
+    try {
+      const {id, action} = req.params
+
+      const acceptedActions = ['close', 'cancel']
+
+      if(!acceptedActions.includes(action))
+        return res.send("Can't do this action")
+
+        const order = await Order.findOne({ where: { id }})
+
+        if(!order) return res.send('Order not found')
+
+        if(order.status != open ) return res.send("Can't Do This Action")
+
+        const statuses = {
+          close: "sold",
+          cancel: "canceled"
+        }
+
+        order.status = statuses[action]
+
+        await Order.update(id, {
+          status: order.status
+        })
+
+        return res.redirect('/orders/sales')
+
+
+    } catch (error) {
+      res.error(error)
     }
   }
 }

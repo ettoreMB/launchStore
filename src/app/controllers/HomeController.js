@@ -7,7 +7,7 @@ async index(req, res) {
             const allProducts = await LoadProductsService.load('products')
             const products = allProducts.filter((product, index) => 
                 index > 6 ? false : true ) // ternario
-            console.log(products)
+                console.log(products)
             return res.render('home/index', {products})
         } catch (error) {
             console.log(error)
